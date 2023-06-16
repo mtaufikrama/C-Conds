@@ -2,65 +2,80 @@
 
 namespace App\Controllers;
 
+use App\Models\BarangModel;
 use App\Models\UserModel;
 
 class User extends BaseController
 {
-    public function login()
+    public function loginindex()
     {
-        $email = $this->request->getPost('email');
-        $password = $this->request->getPost('password');
-    
-        $userModel = new UserModel();
-    
-        // Mencari pengguna berdasarkan email
-        $user = $userModel->where('email', $email)->first();
-        // Jika pengguna ditemukan dan password sesuai
-        $admin = '1';
-        if ($user && $password == $user['password']) {
-            if ($user['id'] == $admin){
-                return redirect()->to('/register');
-            } else{
-                return redirect()->to('/');
-            }
-        } else {
-            // Redirect kembali ke halaman login
-            return view('login');
-        }
+        return view('login');
     }
-    public function register()
+    
+    public function registerindex()
     {
-        $userModel = new UserModel();
-        $user = $userModel->findAll();
-        return view('register', compact('user'));
+        return view('register');
     }
 
-    public function create()
+    public function login()
     {
-        session();
-        $data = [
-            'validation' => \config\Services::validation()
-        ];
-        return view('tambah', $data);
+        session()->start();
+        $email = $this->request->getPost('email');
+        $password = $this->request->getPost('password');
+        $userModel = new UserModel();
+        $user = $userModel->where('email', $email)->first();
+        $admin = '1';
+        $barangModel = new BarangModel();
+        $barang = $barangModel->findAll();
+        if ($user && $password == $user['password']) {
+            session()->set('login',$user['id']);
+            if ($user['id'] == $admin) {
+                return view('admin', compact('barang'));
+            } else {
+                return view('home', compact('barang'));
+            }   
+        } else {
+            return redirect()->to('/register');
+        }
     }
-    public function store()
+    
+    public function logout()
+    {
+        session()->start();
+        session()->remove('login');
+        session()->destroy();
+        return redirect()->to('/');
+    }
+
+    public function register()
     {
         $userModel = new UserModel();
         $file = $this->request->getFile('foto');
         $newName = $file->getRandomName();
         $file->move('images', $newName);
-        $data = [
-            'nama' => $this->request->getPost('nama'),
-            'harga' => $this->request->getPost('harga'),
-            'deskripsi' => $this->request->getPost('deskripsi'),
-            'kategori' => $this->request->getPost('kategori'),
-            'stok' => $this->request->getPost('stok'),
-            'foto' => 'images/' . $newName
-        ];
-        $userModel->insert($data);
-        session()->setFlashData('success', 'Data mahasiswa berhasil ditambahkan!');
-        return view('home');
+        $barangModel = new BarangModel();
+        $barang = $barangModel->findAll();
+        $password = $this->request->getPost('password');
+        $confirmPassword = $this->request->getPost('confirm_password');
+        if ($password == $confirmPassword){
+            $data = [
+                'email' => $this->request->getPost('email'),
+                'password' => $password,
+                'nama' => $this->request->getPost('nama'),
+                'alamat' => $this->request->getPost('alamat'),
+                'harga' => $this->request->getPost('harga'),
+                'no_hp' => $this->request->getPost('no_hp'),
+                'foto' => 'images/' . $newName
+            ];
+            $userModel->insert($data);
+            session()->setFlashData('success', 'Data mahasiswa berhasil ditambahkan!');
+            return view('home', compact('barang'));
+        } else {
+            session()->setFlashData('', 'Data mahasiswa berhasil ditambahkan!');
+            return view('register');
+        }
     }
+    
     public function edit($id)
     {
         $userModel = new UserModel();
@@ -80,12 +95,13 @@ class User extends BaseController
         $newName = $file->getRandomName();
         $file->move('images', $newName);
         $data = [
+            'email' => $this->request->getPost('email'),
+            'password' => $this->request->getPost('password'),
             'nama' => $this->request->getPost('nama'),
+            'alamat' => $this->request->getPost('alamat'),
             'harga' => $this->request->getPost('harga'),
-            'deskripsi' => $this->request->getPost('deskripsi'),
-            'kategori' => $this->request->getPost('kategori'),
-            'stok' => $this->request->getPost('stok'),
-            'gambar' => 'images/' . $newName
+            'no_hp' => $this->request->getPost('no_hp'),
+            'foto' => 'images/' . $newName
         ];
         $userModel->update($id, $data);
         return view('home');
@@ -97,3 +113,4 @@ class User extends BaseController
         return view('home');
     }
 }
+?>

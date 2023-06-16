@@ -91,12 +91,12 @@
 		}
 	</style>
 </head>
+
 <header>
 	<nav class="navbar">
 		<span class="navbar-brand">C-Conds</span>
 		<a class="navbar-button" href="/">Home</a>
-		<a class="navbar-button" href="/keranjang">Keranjang</a>
-		<a class="navbar-button" href="/user/logout">Logout</a>
+		<a class="navbar-button" href="/tambah">Tambah</a>
 	</nav>
 </header>
 
@@ -111,7 +111,7 @@
 		<?php endif; ?>
 		<div class="grid-container">
 			<?php foreach ($barang as $b) : ?>
-				<a class="grid-item" href="/detail/<?= $b['id']; ?>">
+				<a class="grid-item" href="/edit/<?= $b['id']; ?>">
 					<img class="product-image" src="/<?= $b['gambar']; ?>" class="img-thumbnail" alt="..." width="100">
 					<div class="product-title"><?= $b['nama']; ?></div>
 					<div class="product-price">Rp <?= number_format($b['harga'], 0, ",", "."); ?></div>

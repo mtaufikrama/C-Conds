@@ -8,7 +8,6 @@ class Barang extends BaseController
 {
     public function create()
     {
-        session();
         $data = [
             'validation' => \config\Services::validation()
         ];
@@ -30,7 +29,7 @@ class Barang extends BaseController
         ];
         $barangModel->insert($data);
         session()->setFlashData('success', 'Data mahasiswa berhasil ditambahkan!');
-        return view('home');
+        return redirect()->to('/admin');
     }
     public function edit($id)
     {
@@ -59,12 +58,13 @@ class Barang extends BaseController
             'gambar' => 'images/' . $newName
         ];
         $barangModel->update($id, $data);
-        return view('home');
+        return redirect()->to('/admin');
     }
     public function delete($id)
     {
         $barangModel = new BarangModel();
         $barangModel->delete($id);
-        return view('home');
+        return redirect()->to('/admin');
     }
 }
+?>
