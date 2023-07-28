@@ -131,6 +131,18 @@
                 <textarea type="number" min="0" size="10" name="stok" required></textarea>
             </div>
             <div class="form-group">
+                <label for="kategori">Kategori Produk:</label>
+                    <select name="kategori" id="kategori" class="form-control">
+                            <option value="Samsung">Samsung</option>
+                            <option value="IPhone">IPhone</option>
+                            <option value="Xiaomi">Xiaomi</option>
+                            <option value="Oppo">Oppo</option>
+                            <option value="Vivo">Vivo</option>
+                            <option value="Infinix">Infinix</option>
+                        </select>
+            </div>
+            
+            <div class="form-group">
                 <label for="deskripsi">Deskripsi Produk:</label>
                 <textarea type="text" name="deskripsi"></textarea>
             </div>

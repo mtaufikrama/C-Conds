@@ -28,7 +28,7 @@ class Barang extends BaseController
             'gambar' => 'images/' . $newName
         ];
         $barangModel->insert($data);
-        session()->setFlashData('success', 'Data mahasiswa berhasil ditambahkan!');
+        session()->setFlashData('success', 'Barang berhasil ditambahkan!');
         return redirect()->to('/admin');
     }
     public function edit($id)

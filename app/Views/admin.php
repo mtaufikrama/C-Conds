@@ -97,6 +97,7 @@
 		<span class="navbar-brand">C-Conds</span>
 		<a class="navbar-button" href="/">Home</a>
 		<a class="navbar-button" href="/tambah">Tambah</a>
+		<a class="navbar-button" href="/user/logout">Logout</a>
 	</nav>
 </header>
 
